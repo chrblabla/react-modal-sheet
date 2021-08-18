@@ -65,29 +65,20 @@ const Sheet = React.forwardRef<any, SheetProps>(
     }, []); // eslint-disable-line
 
     const handleDragEnd = React.useCallback(
-      (_, { velocity }: PanInfo) => {
-        if (velocity.y > 500) {
-          // User flicked the sheet down
-          onClose();
-        } else {
-          const sheetEl = sheetRef.current as HTMLDivElement;
-          const contentHeight = sheetEl.getBoundingClientRect().height;
-          const snapTo = snapPoints
-            ? getClosest(snapPoints.map(p => contentHeight - p), y.get()) // prettier-ignore
-            : y.get() / contentHeight > 0.6 // Close if dragged over 60%
-            ? contentHeight
-            : 0;
+      (_: PanInfo) => {
+        const sheetEl = sheetRef.current as HTMLDivElement;
+        const contentHeight = sheetEl.getBoundingClientRect().height;
+        const snapTo = snapPoints
+          ? getClosest(snapPoints.map(p => contentHeight - p), y.get()) // prettier-ignore
+          : 0;
 
-          // Update the spring value so that the sheet is animated to the snap point
-          animate(y, snapTo, { type: 'spring', ...springConfig });
+        // Update the spring value so that the sheet is animated to the snap point
+        animate(y, snapTo, { type: 'spring', ...springConfig });
 
-          if (snapPoints && onSnap) {
-            const snapValue = Math.abs(Math.round(snapPoints[0] - snapTo));
-            const snapIndex = snapPoints.indexOf(snapValue);
-            onSnap(snapIndex);
-          }
-
-          if (snapTo >= contentHeight) onClose();
+        if (snapPoints && onSnap) {
+          const snapValue = Math.abs(Math.round(snapPoints[0] - snapTo));
+          const snapIndex = snapPoints.indexOf(snapValue);
+          onSnap(snapIndex);
         }
 
         // Reset indicator rotation after dragging

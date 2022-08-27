@@ -4,29 +4,30 @@ import styled from 'styled-components';
 import Sheet from '../../src';
 import { Button } from './common';
 
-const Scrollable = () => {
+const ContentHeight = () => {
   const [isOpen, setOpen] = React.useState(false);
+  const [boxes, setBoxes] = React.useState([0, 1]);
   const open = () => setOpen(true);
   const close = () => setOpen(false);
 
   return (
     <>
-      <Button onClick={open}>Scrollable Bottom Sheet</Button>
+      <Button onClick={open}>Bottom Sheet Height of Content</Button>
 
       <Sheet
         isOpen={isOpen}
         onClose={close}
         springConfig={{ stiffness: 150, damping: 20, mass: 1 }}
+        useContentHeight={true}
       >
         <Sheet.Container>
           <Sheet.Header />
 
           <Sheet.Content>
             <BoxList>
-              {Array.from({ length: 50 })
-                .fill(1)
+              {boxes
                 .map((_, i) => (
-                  <Box key={i}>{i}</Box>
+                  <Box key={i} onClick={() => setBoxes(prev => [...prev, i + 1])}>{i}</Box>
                 ))}
             </BoxList>
           </Sheet.Content>
@@ -76,4 +77,4 @@ const Box = styled.div`
   font-size: 24px;
 `;
 
-export default Scrollable;
+export default ContentHeight;

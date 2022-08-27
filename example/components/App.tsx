@@ -5,6 +5,7 @@ import { FaScroll as ScrollIcon, FaLock as LockIcon } from 'react-icons/fa';
 import { MdAccessibility as A11yIcon } from 'react-icons/md';
 
 import {
+  AiOutlineColumnHeight as HeightIcon,
   AiFillApple as AppleIcon,
   AiOutlineSlack as SlackIcon,
   AiOutlineControl as SnapIcon,
@@ -17,6 +18,8 @@ import AppleMusic from './apple-music';
 import SlackMessage from './slack-message';
 import A11y from './a11y';
 import DisableDrag from './DisableDrag';
+import ScrollableSnapPoints from './ScrollableSnapPoints';
+import ContentHeight from './ContentHeight';
 
 const App = () => {
   return (
@@ -38,10 +41,26 @@ const App = () => {
         }
       />
       <Route
+        path="scrollable-snap-points/*"
+        element={
+          <Screen bg="light">
+            <ScrollableSnapPoints />
+          </Screen>
+        }
+      />
+      <Route
         path="scrollable/*"
         element={
           <Screen bg="light">
             <Scrollable />
+          </Screen>
+        }
+      />
+      <Route
+        path="content-height/*"
+        element={
+          <Screen bg="light">
+            <ContentHeight />
           </Screen>
         }
       />
@@ -94,9 +113,23 @@ const ExampleSelector = () => {
       </li>
 
       <li>
+        <ExampleLink to="content-height">
+          <HeightIcon size={48} />
+          <span>Use Content Height</span>
+        </ExampleLink>
+      </li>
+
+      <li>
         <ExampleLink to="scrollable">
           <ScrollIcon size={48} />
           <span>Scrollable</span>
+        </ExampleLink>
+      </li>
+
+      <li>
+        <ExampleLink to="scrollable-snap-points">
+          <ScrollIcon size={48} />
+          <span>Scrollable (with snap points)</span>
         </ExampleLink>
       </li>
 

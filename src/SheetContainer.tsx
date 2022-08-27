@@ -20,29 +20,37 @@ const SheetContainer = React.forwardRef<any, SheetContainerProps>(
       sheetRef,
       windowHeight,
       springConfig,
+      useContentHeight,
     } = useSheetContext();
 
     const { handleAnimationComplete } = useEventCallbacks(isOpen, callbacks);
     const initialY = snapPoints ? snapPoints[0] - snapPoints[initialSnap] : 0;
     const h = snapPoints ? snapPoints[0] : null;
     const sheetHeight = h ? `min(${h}px, ${MAX_HEIGHT})` : MAX_HEIGHT;
-
     return (
-      <motion.div
-        {...rest}
-        ref={mergeRefs([sheetRef, ref])}
-        className="react-modal-sheet-container"
-        style={{ ...styles.container, height: sheetHeight, ...style, y }}
-        initial={{ y: windowHeight }}
-        animate={{
-          y: initialY,
-          transition: { type: 'spring', ...springConfig },
-        }}
-        exit={{ y: windowHeight }}
-        onAnimationComplete={handleAnimationComplete}
-      >
-        {children}
-      </motion.div>
+      <>
+        <motion.div
+          {...rest}
+          ref={mergeRefs([sheetRef, ref])}
+          className="react-modal-sheet-container"
+          style={{
+            ...styles.container,
+            ...(!useContentHeight && { height: sheetHeight }),
+            ...(useContentHeight && { maxHeight: sheetHeight }),
+            ...style,
+            y,
+          }}
+          initial={{ y: windowHeight }}
+          animate={{
+            y: initialY,
+            transition: { type: 'spring', ...springConfig },
+          }}
+          exit={{ y: windowHeight }}
+          onAnimationComplete={handleAnimationComplete}
+        >
+          {children}
+        </motion.div>
+      </>
     );
   }
 );
